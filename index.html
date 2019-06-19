@@ -19,7 +19,7 @@
     void main() {
       vec2 position = (a_Position / a_Screen_Size) * 2.0 - 1.0;
       position = position * vec2(1.0, -1.0);
-      gl_Position = vec4(a_Position, 0.0, 1.0);
+      gl_Position = vec4(position, 0.0, 1.0);
       gl_PointSize = 10.0;
     }
   </script>
@@ -48,34 +48,27 @@
 
     gl.vertexAttrib2f(a_Screen_Size, canvas.width, canvas.height)
 
-    var positions = [
-      1, 0,
-      0, 1,
-      0, 0
-    ]
-    var color = randomColor()
-    gl.uniform4f(u_Color, color.r, color.g, color.b, color.a)
+    var positions = []
 
     var buffer = gl.createBuffer()
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW)
 
-    gl.enableVertexAttribArray(a_Position)
-    gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, 0, 0)
-
     gl.clearColor(0.0, 0.0, 0.0, 1.0)
     gl.clear(gl.COLOR_BUFFER_BIT)
-    gl.drawArrays(gl.TRIANGLES, 0, 3)
 
-    // canvas.addEventListener('click', e => {
-    //   var x = e.pageX
-    //   var y = e.pageY
-    //   var color = randomColor()
-
-    //   gl.clearColor(0.0, 0.0, 0.0, 1.0)
-    //   gl.clear(gl.COLOR_BUFFER_BIT)
-
-    // })
+    canvas.addEventListener('click', e => {
+      var color = randomColor()
+      var x = e.pageX
+      var y = e.pageY
+      positions.push(x)
+      positions.push(y)
+      gl.uniform4f(u_Color, color.r, color.g, color.b, color.a)
+      if (positions.length > 0) {
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.DYNAMIC_DRAW)
+      }
+      render(gl)
+    })
 
     function getCanvas(id) {
       var canvas = document.getElementById('canvas')
@@ -110,6 +103,15 @@
         b: Math.random() * 255,
         a: 1.0
       }
+    }
+
+    function render(gl) {
+      gl.clearColor(0.0, 0.0, 0.0, 1.0)
+      gl.clear(gl.COLOR_BUFFER_BIT)
+
+      gl.enableVertexAttribArray(a_Position)
+      gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, 0, 0)
+      gl.drawArrays(gl.LINES, 0, positions.length / 2)
     }
   </script>
 </body>
