@@ -36,7 +36,7 @@ function randomColor() {
     r: Math.random() * 255,
     g: Math.random() * 255,
     b: Math.random() * 255,
-    a: 1.0
+    a: Math.random() * 1.0
   }
 }
 
@@ -44,6 +44,7 @@ function render(gl) {
   gl.clear(gl.COLOR_BUFFER_BIT)
 
   if (positions.length > 0) {
-    gl.drawArrays(gl.TRIANGLES, 0, positions.length / 6)
+    // gl.drawArrays(gl.TRIANGLES, 0, positions.length / 6)
+    gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0)
   }
 }

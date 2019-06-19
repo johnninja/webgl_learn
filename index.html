@@ -49,7 +49,20 @@
     var a_Screen_Size = gl.getAttribLocation(program, 'a_Screen_Size')
     gl.vertexAttrib2f(a_Screen_Size, canvas.width, canvas.height)
 
-    var positions = []
+    var positions = [
+      30, 30, 255, 0, 0, 1,
+      30, 300, 255, 0, 0, 1,
+      300, 300, 0, 255, 0, 1,
+      300, 30, 0, 255, 0, 1
+    ]
+    var indices = [
+      0, 1, 2,
+      0, 2, 3
+    ]
+
+    var indicesBuffer = gl.createBuffer()
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indicesBuffer)
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW)
 
     var a_Position = gl.getAttribLocation(program, 'a_Position')
     var a_Color = gl.getAttribLocation(program, 'a_Color')
@@ -63,17 +76,18 @@
 
     gl.clearColor(0.0, 0.0, 0.0, 1.0)
 
-    canvas.addEventListener('click', e => {
-      var color = randomColor()
-      var x = e.pageX
-      var y = e.pageY
-      positions.push(x, y, color.r, color.g, color.b, color.a)
-      if (positions.length % 18 === 0) {
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW)
-        render(gl)
-      }
-    })
+    // canvas.addEventListener('click', e => {
+    //   var color = randomColor()
+    //   var x = e.pageX
+    //   var y = e.pageY
+    //   positions.push(x, y, color.r, color.g, color.b, color.a)
+    //   if (positions.length % 18 === 0) {
+    //     gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
+    //     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW)
+    //     render(gl)
+    //   }
+    // })
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW)
     render(gl)
 
   </script>
