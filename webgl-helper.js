@@ -42,5 +42,5 @@ function randomColor() {
 
 function render(gl) {
   gl.clear(gl.COLOR_BUFFER_BIT)
-  gl.drawArrays(gl.TRIANGLE_FAN, 0, positions.length / 6)
+  gl.drawArrays(gl.TRIANGLES, 0, positions.length / 4)
 }
